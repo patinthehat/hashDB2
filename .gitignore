@@ -1,0 +1,6 @@
+.settings/**
+.buildpath
+.project
+build/**
+test.ini
+.php_error.log
