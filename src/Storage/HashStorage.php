@@ -66,6 +66,9 @@ abstract class HashStorage
   {
     $storedhash = $this->getStoredHash($filename);
     $filehash   = $this->getFileHash($filename);
+    //echo "\$storedhash = $storedhash \n";
+    //echo "\$filehash = $filehash \n";
+    
     return ($storedhash == $filehash);
   }
   

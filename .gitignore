@@ -4,3 +4,4 @@
 build/**
 test.ini
 .php_error.log
+changes.txt

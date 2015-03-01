@@ -33,17 +33,35 @@ include("autoload.php");
 
 $filename = "test.ini";
 
+if ($argc < 2) {
+  echo "Usage: hashDB.php [filename]\n";
+  die(1);
+}
+
+$inputFilename = $argv[1];
+
 $hasher = new \HashDB2\Hashers\SHA1Hasher();
 $storage = new \HashDB2\Storage\IniHashStorage($filename, $hasher);
 
 $storage->load($filename);
 
-$storage->setStoredDataHash('mydata', 'test');
+$fileChanged = true;
 
 if (!file_exists($filename)) {
-  $storage->setStoredFileHash(__FILE__);
+  $storage->setStoredFileHash($inputFilename);
   $storage->save($filename);
+} else {
+  if (file_exists($inputFilename)) {
+    $fileChanged = !$storage->compareStoredHashToFileHash($inputFilename);
+    $storage->setStoredFileHash($inputFilename);
+    $storage->save($filename);
+  } else {
+    echo 'invalid_filename'.PHP_EOL;
+    die(1);
+  } 
 }
 
-$hdb = new \HashDB2\HashDB2($hasher, $storage);
-print_r($hdb);
+echo ($fileChanged ? 'changed' : 'unchanged') . PHP_EOL;
+
+//$hdb = new \HashDB2\HashDB2($hasher, $storage);
+//print_r($hdb);
